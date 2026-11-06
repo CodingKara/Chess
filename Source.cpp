@@ -1,4 +1,4 @@
-﻿#include <glad/glad.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -47,7 +47,11 @@ int main()
 {
 	// glfw: initialize and configure
 	// ------------------------------
-	glfwInit();
+	if (!glfwInit())
+	{
+		std::cerr << "Failed to initialize GLFW" << std::endl;
+		return -1;
+	}
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -73,11 +77,15 @@ int main()
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	// glad: load all OpenGL function pointers
-	// ---------------------------------------
-	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+	// Initialize GLEW after making the OpenGL context current.
+	glewExperimental = GL_TRUE;
+	const GLenum glewStatus = glewInit();
+	if (glewStatus != GLEW_OK)
 	{
-		std::cout << "Failed to initialize GLAD" << std::endl;
+		std::cerr << "Failed to initialize GLEW: "
+			<< reinterpret_cast<const char*>(glewGetErrorString(glewStatus)) << std::endl;
+		glfwDestroyWindow(window);
+		glfwTerminate();
 		return -1;
 	}
 
