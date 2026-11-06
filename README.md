@@ -13,3 +13,5 @@ To build from a Visual Studio Developer PowerShell after integrating vcpkg:
 ```powershell
 msbuild Chess.sln -m -p:Configuration=Release -p:Platform=x64 -verbosity:minimal
 ```
+
+<img width="796" height="597" alt="image" src="https://github.com/user-attachments/assets/403675ee-8747-4700-a564-32233a091d56" />
